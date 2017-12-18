@@ -1,0 +1,4 @@
+/home/shyreckdc/project/pcl/CMakeFiles/interactive_icp.dir
+/home/shyreckdc/project/pcl/CMakeFiles/statistical_removal.dir
+/home/shyreckdc/project/pcl/CMakeFiles/extract_indices.dir
+/home/shyreckdc/project/pcl/CMakeFiles/draw_model.dir
