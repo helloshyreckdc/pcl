@@ -4,6 +4,7 @@
 #include <pcl/io/pcd_io.h>
 #include <pcl/point_types.h>
 #include <pcl/registration/icp.h>
+#include <pcl/registration/ndt.h>
 #include <pcl/visualization/pcl_visualizer.h>
 #include <pcl/console/time.h>   // TicToc
 
@@ -107,13 +108,35 @@ main (int argc,
   //pcl::transformPointCloud (*cloud_in, *cloud_icp, transformation_matrix);
   //*cloud_tr = *cloud_icp;  // We backup cloud_icp into cloud_tr for later use
 
+  float sum_x = 0;
+  float sum_y = 0;
+  float sum_z = 0;
+  float trans_x = 0;
+  float trans_y = 0;
+  float trans_z = 0;
+
+  for(size_t i = 0; i < cloud_icp->points.size(); ++i)
+  {
+      sum_x = cloud_icp->points[i].x + sum_x;
+      sum_y = cloud_icp->points[i].y + sum_y;
+      sum_z = cloud_icp->points[i].z + sum_z;
+  }
+  trans_x = sum_x / cloud_icp->points.size();
+  trans_y = sum_y / cloud_icp->points.size();
+  trans_z = sum_z / cloud_icp->points.size();
+
+  // Set initial alignment estimate found using robot odometry.
+  Eigen::AngleAxisf init_rotation (0, Eigen::Vector3f::UnitZ ());
+  Eigen::Translation3f init_translation (-trans_x, -trans_y, -trans_z);
+  Eigen::Matrix4f init_guess = (init_translation * init_rotation).matrix ();
+
   // The Iterative Closest Point algorithm
   time.tic ();
   pcl::IterativeClosestPoint<PointT, PointT> icp;
   icp.setMaximumIterations (iterations);
   icp.setInputSource (cloud_icp);
   icp.setInputTarget (cloud_model);
-  icp.align (*cloud_icp);
+  icp.align (*cloud_icp, init_guess);
   icp.setMaximumIterations (1);  // We set this variable to 1 for the next time we will call .align () function
   std::cout << "Applied " << iterations << " ICP iteration(s) in " << time.toc () << " ms" << std::endl;
 

@@ -22,15 +22,15 @@ int main()
       i++;
     }
 
-  for(int l=0; l<=25; l++)
-    for(int m=1; m<=25; m++)
-    {
-      cloud.points[i].x = (float)l*0.002;
-      cloud.points[i].y = 0.0;
-      cloud.points[i].z = (float)m*0.002;
-
-      i++;
-    }
+//  for(int l=0; l<=25; l++)
+//    for(int m=1; m<=25; m++)
+//    {
+//      cloud.points[i].x = (float)l*0.002;
+//      cloud.points[i].y = 0.0;
+//      cloud.points[i].z = (float)m*0.002;
+//
+//      i++;
+//    }
 
   for(int n=1; n<=25; n++)
     for(int o=1; o<=25; o++)
